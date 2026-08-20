@@ -142,7 +142,7 @@
   /* 바닥 콘텐츠는 make_floor_plates.py 로 같은 이름에 덮어쓴다 — 캐시가 옛 그림을
      붙들고 있어 「분명 고쳤는데 그대로」가 된다. 재생성할 때 이 숫자를 올릴 것.
      (7p 타일도 index.html 에서 같은 ?v= 를 달고 있다) */
-  var FV = '?v=2';
+  var FV = '?v=3';
 
   /* 투사 밴드는 구축 구간에만 깔린다 (계단실 구간은 그냥 바닥) */
   var bandHtml = '<div class="cw-band" style="left:' + A0 + 'px;width:' + L +
