@@ -18,12 +18,12 @@
   <meta name="description" content="복도 바닥 프로젝션 · 대형 LED 미디어월 · 과 부스 5개소 — 콘텐츠 · 시스템 구축 계획." />
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
-  <link rel="stylesheet" href="css/tokens.css?v=20260821101000" />
-  <link rel="stylesheet" href="css/base.css?v=20260821101000" />
-  <link rel="stylesheet" href="css/slides.css?v=20260821101000" />
-  <link rel="stylesheet" href="css/storyboard.css?v=20260821101000" />
-  <link rel="stylesheet" href="css/proposal.css?v=20260821101000" />
-  <link rel="stylesheet" href="css/gunja.css?v=20260821101000" />
+  <link rel="stylesheet" href="css/tokens.css?v=20260821110000" />
+  <link rel="stylesheet" href="css/base.css?v=20260821110000" />
+  <link rel="stylesheet" href="css/slides.css?v=20260821110000" />
+  <link rel="stylesheet" href="css/storyboard.css?v=20260821110000" />
+  <link rel="stylesheet" href="css/proposal.css?v=20260821110000" />
+  <link rel="stylesheet" href="css/gunja.css?v=20260821110000" />
 </head>
 <body>
   <div id="boot"></div>
@@ -174,7 +174,6 @@
       <div class="cw-ui">
         <p class="eyebrow">공간 시뮬레이션</p>
         <h2 class="headline--h2 mt-s">실측 치수로 세운 복도</h2>
-        <p class="cw-hint">마우스 휠로 복도를 앞뒤로 이동</p>
       </div>
 
       <div class="cw-spec">
@@ -186,15 +185,14 @@
 
       <div class="cw-wheel" aria-hidden="true"><i></i></div>
 
-      <!-- 조명 토글은 없앴다 — 「00 · 없음」이 곧 프로젝터가 꺼진 평상시 복도다.
-           06p 처럼 한 줄씩 세로로 쌓는다. -->
+      <!-- 조명 토글은 없앴다 — 「00 없음」이 곧 프로젝터가 꺼진 평상시 복도다.
+           06p 관람 지점 버튼과 같은 형태(번호 + 라벨)로 세로 한 줄. -->
       <div class="cw-ctrl" data-no-advance>
-        <span class="cw-ctrl__k">바닥 콘텐츠</span>
-        <button class="cw-fbtn" data-floor="" type="button">00 · 없음</button>
-        <button class="cw-fbtn" data-floor="f01-base" type="button">01 · 빛의 결</button>
-        <button class="cw-fbtn is-on" data-floor="f02-text" type="button">02 · 데이터</button>
-        <button class="cw-fbtn" data-floor="f03-image" type="button">03 · 키캡</button>
-        <button class="cw-fbtn" data-floor="f04-art" type="button">04 · 파티클 명화</button>
+        <button class="cw-fbtn" data-floor="" type="button"><b>00</b>없음</button>
+        <button class="cw-fbtn" data-floor="f01-base" type="button"><b>01</b>빛의 결</button>
+        <button class="cw-fbtn is-on" data-floor="f02-text" type="button"><b>02</b>데이터</button>
+        <button class="cw-fbtn" data-floor="f03-image" type="button"><b>03</b>키캡</button>
+        <button class="cw-fbtn" data-floor="f04-art" type="button"><b>04</b>파티클 명화</button>
       </div>
 
       <div class="cw-pos"><b><span id="corrPos">계단실</span><span id="corrUnit" style="display:none">m</span></b>통심 ③ 기점 진행 거리</div>
@@ -312,10 +310,10 @@
 
   <!-- tech.js · cue-console.js · album-tabs.js · storyboard.js 는 담당하던 슬라이드가
        빠지면서 붙일 곳이 없어졌다. 파일은 deck/js 에 남겨 두고 로드만 끊는다. -->
-  <script src="js/gallery-data.js?v=20260821101000"></script>
-  <script src="js/room3d.js?v=20260821101000"></script>
-  <script src="js/corridor.js?v=20260821101000"></script>
-  <script src="js/imw-hover.js?v=20260821101000"></script>
-  <script src="js/deck.js?v=20260821101000"></script>
+  <script src="js/gallery-data.js?v=20260821110000"></script>
+  <script src="js/room3d.js?v=20260821110000"></script>
+  <script src="js/corridor.js?v=20260821110000"></script>
+  <script src="js/imw-hover.js?v=20260821110000"></script>
+  <script src="js/deck.js?v=20260821110000"></script>
 </body>
 </html>

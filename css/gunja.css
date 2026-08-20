@@ -454,11 +454,11 @@
 
 /* HUD */
 .cw-ui { position: absolute; left: 64px; top: 58px; z-index: 12; pointer-events: none; }
-.cw-hint { margin-top: 13px; font: var(--fw-regular) 15px/1.5 var(--font); color: var(--fg-dim); }
+/* .cw-hint(마우스 휠 안내)는 걷어냈다 — 휠 가이드 애니메이션이 이미 말하고 있다. */
 /* 우상단 제원 — 본문이 아니라 곁다리 정보라 15px 의 절반으로 눌러 둔다.
    줄간은 좁아진 글자에 맞춰 조금 벌린다. (06p 교실 .rm-spec 과 같은 값) */
 .cw-spec { position: absolute; right: 64px; top: 58px; z-index: 12; text-align: right;
-  font: var(--fw-regular) 7.5px/1.9 var(--font); color: var(--fg-dim); }
+  font: var(--fw-regular) 15px/1.75 var(--font); color: var(--fg-dim); }
 .cw-spec b { color: var(--fg); font-weight: var(--fw-semibold); }
 .cw-pos { position: absolute; right: 64px; bottom: 58px; z-index: 12; text-align: right;
   font: var(--fw-regular) 14px/1.3 var(--font); color: var(--fg-dim); }
@@ -466,14 +466,9 @@
   font-variant-numeric: tabular-nums; }
 .cw-pos b span { font-size: 20px; color: var(--fg-dim); margin-left: 3px; }
 
-.cw-fbtns { position: absolute; left: 64px; bottom: 58px; z-index: 12; display: flex; gap: 9px; }
-.cw-fbtn { padding: 10px 20px; border-radius: 999px; border: 0; cursor: pointer;
-  background: rgba(20,20,22,.55); color: var(--fg-dim);
-  font: var(--fw-regular) 15px/1 var(--font);
-  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); transition: all .2s ease; }
-.cw-fbtn:hover { color: var(--fg); box-shadow: 0 0 7px rgba(255,255,255,.2); }
-.cw-fbtn.is-on { color: var(--fg); font-weight: var(--fw-semibold);
-  box-shadow: 0 0 7px rgba(255,255,255,.3), 0 0 16px rgba(255,255,255,.14); }
+/* 05p 바닥 콘텐츠 버튼은 06p 관람 지점 버튼(.rm-vbtn)과 같은 규칙을 쓴다 —
+   두 슬라이드가 같은 자리에 같은 형태로 놓이는 컨트롤이라 값이 갈리면 안 된다.
+   선언은 「34. 08p 관람 동선」 절에 한 번만 두고 여기서는 잡아 쓰기만 한다. */
 
 /* 휠 가이드 — 07p 복도(.cw-wheel) · 08p 교실(.rm-wheel) 동일 형태 · 동일 위치 */
 .cw-wheel, .rm-wheel { position: absolute; left: 50%; bottom: 116px; z-index: 12; margin-left: -13px;
@@ -639,20 +634,20 @@
 /* HUD */
 .rm-ui { position: absolute; left: 64px; top: 58px; z-index: 12; pointer-events: none; }
 .rm-spec { position: absolute; right: 64px; top: 58px; z-index: 12; text-align: right;
-  font: var(--fw-regular) 7.5px/1.9 var(--font); color: var(--fg-dim); }
+  font: var(--fw-regular) 15px/1.75 var(--font); color: var(--fg-dim); }
 .rm-spec b { color: var(--fg); font-weight: var(--fw-semibold); }
 /* 관람 지점 9개 — 좌측 하단에 한 줄씩 세로로 쌓는다.
    2행으로 접으면 순서가 오른쪽 끝에서 왼쪽 처음으로 되돌아와 동선 목록으로 안 읽힌다.
    버튼 9 × (30 + gap 6) ≈ 318 이라 하단 52 에서 시작해도 제목 영역을 침범하지 않는다. */
 .rm-vbtns { position: absolute; left: 64px; bottom: 52px; z-index: 12;
   display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
-.rm-vbtn { display: flex; align-items: center; gap: 9px; min-width: 172px;
+.rm-vbtn, .cw-fbtn { display: flex; align-items: center; gap: 9px; min-width: 172px;
   padding: 7px 18px; border-radius: 999px; border: 0; cursor: pointer;
   background: rgba(20,20,22,.55); color: var(--fg-dim);
   font: var(--fw-regular) 14.5px/1 var(--font);
   -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); transition: all .2s ease; }
-.rm-vbtn:hover { color: var(--fg); box-shadow: 0 0 7px rgba(255,255,255,.2); }
-.rm-vbtn.is-on { color: var(--fg); font-weight: var(--fw-semibold);
+.rm-vbtn:hover, .cw-fbtn:hover { color: var(--fg); box-shadow: 0 0 7px rgba(255,255,255,.2); }
+.rm-vbtn.is-on, .cw-fbtn.is-on { color: var(--fg); font-weight: var(--fw-semibold);
   box-shadow: 0 0 7px rgba(255,255,255,.3), 0 0 16px rgba(255,255,255,.14); }
 .rm-now { position: absolute; right: 64px; bottom: 58px; z-index: 12; text-align: right;
   font: var(--fw-regular) 14px/1.3 var(--font); color: var(--fg-dim); }
@@ -705,8 +700,7 @@
    조명 토글은 없앴다(「00 · 없음」이 곧 평상시 복도). */
 .cw-ctrl { position: absolute; left: 64px; bottom: 52px; z-index: 12;
   display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
-.cw-ctrl__k { font: var(--fw-regular) 13px/1 var(--font); color: var(--fg-dim);
-  letter-spacing: .02em; margin-bottom: 3px; padding-left: 4px; }
+
 
 /* ── 30. 19p CMS 화면 — 목업 사진이 없을 때의 채움 ──────────────────
    원본 덱(.cue-mock)은 '모니터가 찍힌 사진' 위에 콘텐츠를 %좌표로 합성하는 구조다.
@@ -759,9 +753,9 @@
 
 /* ── 34. 08p 관람 동선 9지점 컨트롤 ──
    번호 폭을 고정해 세로로 쌓았을 때 라벨 시작선이 어긋나지 않게 한다. */
-.rm-vbtn > b { flex: none; width: 17px; text-align: right;
+.rm-vbtn > b, .cw-fbtn > b { flex: none; width: 17px; text-align: right;
   font: var(--fw-bold) 12px/1 var(--font-num); color: var(--fg-dim); letter-spacing: .06em; }
-.rm-vbtn.is-on > b { color: var(--fg); }
+.rm-vbtn.is-on > b, .cw-fbtn.is-on > b { color: var(--fg); }
 .rm-now__n { display: block; font: var(--fw-regular) 13px/1 var(--font-num); color: var(--fg-dim);
   letter-spacing: .08em; margin-bottom: 4px; }
 .rm-now__n > i { font-style: normal; font-weight: var(--fw-bold); color: var(--fg); font-size: 16px; }
