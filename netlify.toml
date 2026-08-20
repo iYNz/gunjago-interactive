@@ -1,0 +1,33 @@
+[build]
+  publish = "."
+
+# 정적 덱이라 빌드 단계가 없다. 이 디렉토리를 그대로 올린다.
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# 미디어는 오래 캐시한다 — 파일명을 바꿔 교체하는 것을 전제로 한다.
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+# HTML/CSS/JS 는 항상 최신을 받는다 — 발표 직전 수정이 즉시 반영돼야 한다.
+[[headers]]
+  for = "/index.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/css/*"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/js/*"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
