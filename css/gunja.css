@@ -471,8 +471,10 @@
 /* HUD */
 .cw-ui { position: absolute; left: 64px; top: 58px; z-index: 12; pointer-events: none; }
 .cw-hint { margin-top: 13px; font: var(--fw-regular) 15px/1.5 var(--font); color: var(--fg-dim); }
+/* 우상단 제원 태그 — 15px 에서 절반으로. 본문이 아니라 곁다리 정보라
+   눈에 먼저 들어오면 안 된다. 줄간은 좁아진 글자에 맞춰 조금 벌린다. */
 .cw-spec { position: absolute; right: 64px; top: 58px; z-index: 12; text-align: right;
-  font: var(--fw-regular) 15px/1.75 var(--font); color: var(--fg-dim); }
+  font: var(--fw-regular) 7.5px/1.9 var(--font); color: var(--fg-dim); }
 .cw-spec b { color: var(--fg); font-weight: var(--fw-semibold); }
 .cw-pos { position: absolute; right: 64px; bottom: 58px; z-index: 12; text-align: right;
   font: var(--fw-regular) 14px/1.3 var(--font); color: var(--fg-dim); }
@@ -653,7 +655,7 @@
 /* HUD */
 .rm-ui { position: absolute; left: 64px; top: 58px; z-index: 12; pointer-events: none; }
 .rm-spec { position: absolute; right: 64px; top: 58px; z-index: 12; text-align: right;
-  font: var(--fw-regular) 15px/1.75 var(--font); color: var(--fg-dim); }
+  font: var(--fw-regular) 7.5px/1.9 var(--font); color: var(--fg-dim); }
 .rm-spec b { color: var(--fg); font-weight: var(--fw-semibold); }
 /* 관람 지점 9개 — 좌측 하단에 한 줄씩 세로로 쌓는다.
    2행으로 접으면 순서가 오른쪽 끝에서 왼쪽 처음으로 되돌아와 동선 목록으로 안 읽힌다.
