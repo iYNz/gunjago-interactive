@@ -75,15 +75,9 @@
     return '<div class="cw-sill"></div><div class="cw-win"><i></i><i></i></div>';
   }
 
-  /* 라벨은 벽에 얹으면 벽과 같이 90° 누워 안 읽힌다. 따로 세우고,
-     벽보다 카메라 쪽으로 당겨 벽면에 가려지지 않게 한다. */
-  function label(z, info) {
-    add('cw-lblbox', 240, 66,
-      'translate3d(' + (HW - 110) + 'px,' + (CEIL_Y + 92) + 'px,' + (z + 150) + 'px)',
-      '<span class="cw-lbl' + (info.t === 'seal' ? ' cw-lbl--dim' : '') + '">' +
-      '<b>' + info.lbl + '</b>' + info.sub + '</span>',
-      { z: z + 150, near: 3 * BAYW, lbl: 1, lx: HW - 110 });
-  }
+  /* 공중에 뜬 말풍선 라벨(미술실 입구 · 밀폐 마감 · 계단실 …)은 걷어냈다.
+     복도를 걸어가며 보는 화면인데, 라벨이 벽마다 떠 있어 도면 주석처럼 읽혔다.
+     어느 문이 존치이고 어디가 마감인지는 04p 도면과 우상단 제원이 들고 있다. */
 
   /* 계단 참 3베이 + 구축 구간 12베이 */
   for (var i = -PRE; i < BAY; i++) {
@@ -99,7 +93,6 @@
     add('cw cw--r' + (info ? ' cw--' + info.t : ''), BAYW, WHH,
       'translate3d(' + HW + 'px,' + YC + 'px,' + z + 'px) rotateY(-90deg)',
       bayHTML(info ? info.t : 'win'), { z: z });
-    if (info && info.lbl) label(z, info);
   }
 
   /* ---- 올라온 계단 ----
@@ -124,10 +117,6 @@
   add('cw-rail', stD, 12,
     'translate3d(' + (HW + 40) + 'px,' + (FLOOR_Y - 1.05 * PPM) + 'px,' + stZ + 'px) rotateY(-90deg)',
     '', { z: stZ });
-  add('cw-lblbox', 240, 66,
-    'translate3d(' + (HW - 40) + 'px,' + (CEIL_Y + 150) + 'px,' + zOf(A0 * 0.8) + 'px)',
-    '<span class="cw-lbl"><b>계단실 #1</b>3층 진입</span>',
-    { z: zOf(A0 * 0.8), near: 2.2 * BAYW, lbl: 1, lx: HW - 40 });
 
   /* ---- 바닥 ---- */
   var zc = zOf(TL / 2);
@@ -167,38 +156,18 @@
     coneZ.push(zOf(mid));
   }
 
-  /* LiDAR 3대 — 교실쪽 벽 상부. 구축 구간 3분할(2.7 / 8.1 / 13.5m).
-     감지 부채꼴은 지웠지만 장비 자체는 천장에 남는다. */
-  var LD = [2.7, 8.1, 13.5];
-
   fx.innerHTML = bandHtml;
 
   /* ---- 구축 범위 끝(통심 ⑤) ---- */
   add('cw-end', CW, WHH, 'translate3d(0,' + YC + 'px,' + zOf(TL) + 'px)',
     '<span>구축 범위 끝 · 통심 ⑤<br /><i>16,200mm</i></span>', { z: zOf(TL) });
 
-  /* ---- 천장 : 형광등 · LiDAR ----
-     길이 방향으로는 콘 사이 빈칸에 두지만, 그것만으로는 화면에서 안 떨어진다.
-     콘은 천장에서 바닥까지 내려오는 삼각형이라, 복도 한가운데에 등을 두면
-     깊이가 다른 콘의 몸통 위에 얹혀 보인다. 등을 좌우 2열로 벌려 중앙을 비운다
-     (±0.75m — 유효폭 2.5m 안, 콘 꼭짓점 폭 밖).
-     길이 좌표는 콘에서 계산한다 — 손으로 적어 두면 콘을 옮길 때마다 어긋난다. */
-  var FLX = 0.75 * PPM;
-  var GAPS = [];
-  for (var g = 0; g + 2 < pjA.length; g += 2) GAPS.push((pjA[g] + pjA[g + 1]) / 2);
-  var FLPOS = [A0 / 2].concat(GAPS);              // 계단실 구간에도 1조
-  var flHtml = FLPOS.map(function (a) {
-    return '<i class="cw-fl" style="left:' + a + 'px;top:calc(50% - ' + FLX + 'px)"></i>' +
-           '<i class="cw-fl" style="left:' + a + 'px;top:calc(50% + ' + FLX + 'px)"></i>';
-  }).join('');
-  var ldBody = LD.map(function (m) {
-    return '<i class="cw-ld" style="left:' + (A0 + m * PPM) + 'px"></i>';
-  }).join('');
-  /* 천장에 프로젝터 본체를 그리던 것은 걷어냈다 — 빛기둥이 이미 위치를 말하고 있고,
-     본체 그림까지 얹으니 천장이 장비 도판처럼 읽혔다. 표시는 콘 꼭대기의 작은 원. */
-  add('cw-ceil', CW, TL, 'translate3d(0,' + CEIL_Y + 'px,' + zc + 'px) rotateX(-90deg)',
-    '<div class="cw-ceil__in" style="width:' + TL + 'px;height:' + CW + 'px">' +
-    flHtml + ldBody + '</div>');
+  /* ---- 천장 ----
+     형광등 · 프로젝터 본체 · LiDAR 원까지 전부 걷어내 민 천장으로 둔다.
+     빛기둥이 이미 프로젝터 위치를 말하고, 기구를 그려 넣으면 어느 배치든
+     콘과 화면에서 겹친다 — 콘이 천장에서 바닥까지 내려오는 삼각형이라
+     길이로 띄우든 좌우로 벌리든 깊이가 다른 콘의 몸통 위에 얹힌다. */
+  add('cw-ceil', CW, TL, 'translate3d(0,' + CEIL_Y + 'px,' + zc + 'px) rotateX(-90deg)', '');
 
   /* ---- 투사 콘 ----
      복도를 정면으로 보는 시점이라 복도 축과 나란한 면은 날이 서서 안 보인다.
@@ -268,6 +237,11 @@
     'f04-art': '176,206,255'        // 파티클 명화 — 블루
   };
   var img = document.getElementById('corrFloorImg');
+
+  /* 조명 토글은 없앴다 — 바닥 콘텐츠 선택이 곧 조명 상태다.
+       「00 · 없음」  프로젝터가 꺼진 평상시 복도 → 공간을 밝히고 빛기둥도 끈다
+       나머지 4종    운영 중 → 소등된 복도에 빛기둥과 바닥 콘텐츠
+     상태가 둘로 갈리는 것을 버튼 두 벌로 나눠 두니 조합만 늘고 뜻은 같았다. */
   function setFloor(b) {
     slide.querySelectorAll('.cw-fbtn').forEach(function (x) { x.classList.remove('is-on'); });
     b.classList.add('is-on');
@@ -275,38 +249,11 @@
     img.style.display = f ? '' : 'none';
     if (f) img.src = 'assets/img/floor/' + f + '.jpg' + FV;
     slide.style.setProperty('--cone', CONE[f] || CONE['']);
-    slide.style.setProperty('--cone-a', f ? '1' : '.45');
+    slide.classList.toggle('is-lit', !f);
+    slide.classList.toggle('fx-cone', !!f);
   }
-  var last = null;                       // 형광등으로 갈 때 접어 둔 콘텐츠
   slide.querySelectorAll('.cw-fbtn').forEach(function (b) {
-    b.addEventListener('click', function (e) {
-      e.stopPropagation();
-      setFloor(b);
-      /* 콘텐츠를 직접 고르면 형광등 복귀분은 무효 — 지금 고른 것이 기준이 된다 */
-      last = b.dataset.floor ? b : null;
-    });
+    b.addEventListener('click', function (e) { e.stopPropagation(); setFloor(b); });
   });
   setFloor(slide.querySelector('.cw-fbtn.is-on'));
-
-  /* 투사 콘은 상시 켜 둔다 — 이 슬라이드가 말하려는 게 "천장에서 바닥으로 쏜다"라
-     토글로 숨겨 둘 이유가 없었다. 형광등 모드에서만 끈다(그 아래선 안 보인다). */
-  slide.classList.add('fx-cone');
-  slide.querySelectorAll('.cw-mbtn').forEach(function (b) {
-    b.addEventListener('click', function (e) {
-      e.stopPropagation();
-      var m = b.dataset.mode, lit = m === 'lit';
-      slide.querySelectorAll('.cw-mbtn').forEach(function (x) { x.classList.remove('is-on'); });
-      b.classList.add('is-on');
-      slide.classList.toggle('is-lit', lit);
-      slide.classList.toggle('fx-cone', !lit);
-      /* 형광등을 켜면 프로젝터는 꺼진 상태다 — 바닥 콘텐츠도 같이 내려야 앞뒤가 맞는다.
-         소등으로 돌아올 때 직전 콘텐츠를 되살린다. */
-      if (lit) {
-        last = slide.querySelector('.cw-fbtn.is-on');
-        setFloor(slide.querySelector('.cw-fbtn[data-floor=""]'));
-      } else if (last) {
-        setFloor(last);
-      }
-    });
-  });
 })();

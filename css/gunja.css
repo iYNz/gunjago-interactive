@@ -423,17 +423,9 @@
   box-shadow: inset 0 0 0 1px rgba(255,255,255,.10); }
 .cw--seal { background: linear-gradient(180deg, #212125 0%, #171719 100%); }
 
-/* 베이 라벨 — 벽과 따로 세워 카메라를 정면으로 본다(빌보드).
-   벽면에 얹으면 벽과 같이 90° 누워서 글자가 읽히지 않는다. */
-.cw-lblbox { position: absolute; display: flex; align-items: center; justify-content: center;
-  transition: opacity .3s ease; pointer-events: none; }
-.cw-lbl { display: inline-flex; flex-direction: column; align-items: center; gap: 2px;
-  white-space: nowrap; padding: 8px 18px; border-radius: 999px; background: rgba(8,8,10,.85);
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,.24);
-  font: var(--fw-regular) 15px/1.2 var(--font); color: var(--fg-dim); }
-.cw-lbl > b { font: var(--fw-bold) 21px/1.2 var(--font); color: var(--fg); }
-.cw-lbl--dim { opacity: .45; }
-.cw-lbl--dim > b { color: var(--fg-dim); }
+/* 공중에 뜬 베이 라벨(.cw-lblbox — 미술실 입구 · 밀폐 마감 · 계단실)은 걷어냈다.
+   복도를 걸어가며 보는 화면인데 벽마다 말풍선이 떠 도면 주석처럼 읽혔다.
+   어느 문이 존치이고 어디가 마감인지는 04p 도면과 우상단 제원이 들고 있다. */
 
 /* 구축 범위 끝 면 */
 .cw-end { position: absolute; display: flex; align-items: center; justify-content: center;
@@ -452,14 +444,9 @@
    밝기·대비 보정은 넣지 않는다. 레퍼런스 원본이 이미 발광 톤이라 보정하면 하이라이트가 탄다. */
 .cw-band img { display: block; width: 100%; height: 100%; max-width: none; }
 
-/* 천장 · 프로젝터 매립 개구 10 · LiDAR 3 */
+/* 천장 — 기구는 아무것도 그리지 않는 민 천장 */
 .cw-ceil { position: absolute; background: #131316;
   box-shadow: inset 0 0 0 1px rgba(255,255,255,.05); }
-/* 천장 프로젝터 본체(.cw-pj)는 걷어냈다 — 빛기둥이 이미 위치를 말한다.
-   대신 콘 꼭짓점에 렌즈 자리를 작은 원으로 찍는다(.cw-lens). */
-.cw-ld { position: absolute; top: 50%; width: 26px; height: 26px; margin: -13px 0 0 -13px;
-  border-radius: 50%; background: rgba(6,6,8,.92);
-  box-shadow: inset 0 0 0 2px rgba(255,255,255,.5), 0 0 14px rgba(255,255,255,.18); }
 
 /* 비네팅 — 프레임 가장자리를 눌러 복도에 집중시킨다 */
 .cw-stage::after { content: ""; position: absolute; inset: 0; z-index: 8; pointer-events: none;
@@ -468,8 +455,11 @@
 /* HUD */
 .cw-ui { position: absolute; left: 64px; top: 58px; z-index: 12; pointer-events: none; }
 .cw-hint { margin-top: 13px; font: var(--fw-regular) 15px/1.5 var(--font); color: var(--fg-dim); }
-/* 05p 우상단 제원 태그(.cw-spec)는 마크업에서 걷어냈다 — 치수는 앞 두 장이 이미 말한다.
-   06p 교실(.rm-spec)은 남아 있다. */
+/* 우상단 제원 — 본문이 아니라 곁다리 정보라 15px 의 절반으로 눌러 둔다.
+   줄간은 좁아진 글자에 맞춰 조금 벌린다. (06p 교실 .rm-spec 과 같은 값) */
+.cw-spec { position: absolute; right: 64px; top: 58px; z-index: 12; text-align: right;
+  font: var(--fw-regular) 7.5px/1.9 var(--font); color: var(--fg-dim); }
+.cw-spec b { color: var(--fg); font-weight: var(--fw-semibold); }
 .cw-pos { position: absolute; right: 64px; bottom: 58px; z-index: 12; text-align: right;
   font: var(--fw-regular) 14px/1.3 var(--font); color: var(--fg-dim); }
 .cw-pos b { display: block; font: var(--fw-bold) 44px/1 var(--font-num); color: var(--fg);
@@ -681,20 +671,11 @@
 .cw-stair i { display: block; height: 9%; background: rgba(255,255,255,.09);
   box-shadow: 0 -1px 0 rgba(255,255,255,.16); }
 
-/* 천장 — 형광등 · 매립 개구
-   바닥의 .cw-fx 와 같은 좌표계로 눕힌다. 천장 판은 폭 × 길이라
-   회전 없이 left 로 배치하면 길이 좌표가 폭(650px) 밖으로 나가 전부 사라진다. */
-.cw-ceil__in { position: absolute; left: 50%; top: 50%;
-  transform: translate(-50%, -50%) rotate(-90deg); }
-.cw-fl { position: absolute; top: 50%; width: 150px; height: 150px; margin: -75px 0 0 -75px;
-  border-radius: 2px; background: rgba(238,242,250,.10);
-  box-shadow: inset 0 0 0 2px rgba(255,255,255,.13); transition: all .35s ease; }
-.is-lit .cw-fl { background: rgba(246,249,255,.92);
-  box-shadow: inset 0 0 0 2px rgba(255,255,255,.6), 0 0 90px 30px rgba(226,234,250,.42); }
-/* 평상시엔 프로젝터가 꺼져 있다 */
-.is-lit .cw-pj::after { background: rgba(120,124,132,.18); box-shadow: none; }
+/* 천장 기구(형광등 .cw-fl · 매립 개구 .cw-pj · LiDAR .cw-ld)는 전부 걷어냈다.
+   콘이 천장에서 바닥까지 내려오는 삼각형이라, 천장에 무엇을 그리든 깊이가 다른
+   콘의 몸통 위에 얹혀 보인다 — 길이로 띄우든 좌우로 벌리든 마찬가지였다. */
 
-/* 조명 모드에 따른 공간 밝기 */
+/* 「00 · 없음」 = 프로젝터가 꺼진 평상시 복도 → 공간을 밝힌다 */
 .cw, .cw-floor, .cw-ceil { transition: filter .35s ease; }
 .is-lit .cw { filter: brightness(2.6); }
 .is-lit .cw-ceil { filter: brightness(1.7); }
@@ -720,20 +701,12 @@
     rgba(var(--cone, 236,238,244), calc(.005 * var(--cone-a, 1)))); }
 .fx-cone .cw-cone { opacity: 1; }
 
-/* 하단 컨트롤 — 2행 (콘텐츠 / 모드) */
+/* 하단 컨트롤 — 06p 교실과 같은 세로 한 줄. 가로로 늘어놓으면 화면 폭을 가로지른다.
+   조명 토글은 없앴다(「00 · 없음」이 곧 평상시 복도). */
 .cw-ctrl { position: absolute; left: 64px; bottom: 52px; z-index: 12;
-  display: flex; flex-direction: column; gap: 10px; }
-.cw-row { display: flex; align-items: center; gap: 9px; }
-.cw-row__k { font: var(--fw-regular) 13px/1 var(--font); color: var(--fg-dim);
-  width: 62px; flex: none; letter-spacing: .02em; }
-.cw-mbtn { padding: 9px 17px; border-radius: 999px; border: 0; cursor: pointer;
-  background: rgba(20,20,22,.55); color: var(--fg-dim);
-  font: var(--fw-regular) 14px/1 var(--font);
-  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); transition: all .2s ease; }
-.cw-mbtn:hover { color: var(--fg); box-shadow: 0 0 7px rgba(255,255,255,.2); }
-.cw-mbtn.is-on { color: var(--fg); font-weight: var(--fw-semibold);
-  box-shadow: 0 0 7px rgba(255,255,255,.3), 0 0 16px rgba(255,255,255,.14); }
-.is-lit .cw-mbtn[data-fx] { opacity: .35; cursor: not-allowed; }
+  display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
+.cw-ctrl__k { font: var(--fw-regular) 13px/1 var(--font); color: var(--fg-dim);
+  letter-spacing: .02em; margin-bottom: 3px; padding-left: 4px; }
 
 /* ── 30. 19p CMS 화면 — 목업 사진이 없을 때의 채움 ──────────────────
    원본 덱(.cue-mock)은 '모니터가 찍힌 사진' 위에 콘텐츠를 %좌표로 합성하는 구조다.
@@ -909,7 +882,10 @@
 .bx--vled[data-gallery]:hover > .bx__f { box-shadow: inset 0 0 0 5px #dfe3ec, 0 0 60px rgba(255,255,255,.42); }
 .bx--tv[data-gallery]:hover   > .bx__f { box-shadow: inset 0 0 0 6px #dfe3ec, 0 0 46px rgba(255,255,255,.36); }
 .bx--tab[data-gallery]:hover  > .bx__f { box-shadow: inset 0 0 0 4px #dfe3ec, 0 0 34px rgba(255,255,255,.40); }
-.bx--led[data-gallery]:hover  > .bx__f { box-shadow: inset 0 0 0 7px #dfe3ec, 0 0 110px rgba(255,255,255,.44); }
+/* 미디어월만 호버 증가분을 절반으로 — 화면 자체가 이미 밝아 부스 기기와 같은 값을 주면 폭발한다.
+   밝기 +0.16 → +0.08, 글로우 .44 → .22. */
+.bx--led[data-gallery]:hover  > .bx__f { box-shadow: inset 0 0 0 7px #dfe3ec, 0 0 110px rgba(255,255,255,.22); }
+.bx--led[data-gallery]:hover  > .bx__f { filter: brightness(1.08); }
 /* 관람 지점 줄 — 부스 줄에는 시안 A/B 가 붙는다 */
 .rm-vrow { display: flex; align-items: center; gap: 7px; }
 .rm-ab { display: inline-flex; gap: 2px; padding: 2px; border-radius: 999px;
