@@ -177,16 +177,19 @@
   add('cw-end', CW, WHH, 'translate3d(0,' + YC + 'px,' + zOf(TL) + 'px)',
     '<span>구축 범위 끝 · 통심 ⑤<br /><i>16,200mm</i></span>', { z: zOf(TL) });
 
-  /* ---- 천장 : 형광등 · 프로젝터 매립 개구 · LiDAR ----
-     형광등은 프로젝터 개구 사이 빈칸의 정중앙에 둔다 — 좌표를 손으로 적어 두면
-     개구가 움직일 때마다 어긋나므로 pjA 에서 계산한다.
-     개구 반폭 52 · 등 반폭 75 · 개구 간격 414px → 틈 310px, 등 150 이 들어가고 80px 씩 남는다.
-     한 칸 걸러 하나씩만 놓아 등 간격을 828px(3.2m)로 — 매 칸이면 1.6m 라 너무 촘촘하다. */
+  /* ---- 천장 : 형광등 · LiDAR ----
+     길이 방향으로는 콘 사이 빈칸에 두지만, 그것만으로는 화면에서 안 떨어진다.
+     콘은 천장에서 바닥까지 내려오는 삼각형이라, 복도 한가운데에 등을 두면
+     깊이가 다른 콘의 몸통 위에 얹혀 보인다. 등을 좌우 2열로 벌려 중앙을 비운다
+     (±0.75m — 유효폭 2.5m 안, 콘 꼭짓점 폭 밖).
+     길이 좌표는 콘에서 계산한다 — 손으로 적어 두면 콘을 옮길 때마다 어긋난다. */
+  var FLX = 0.75 * PPM;
   var GAPS = [];
   for (var g = 0; g + 2 < pjA.length; g += 2) GAPS.push((pjA[g] + pjA[g + 1]) / 2);
-  var FLPOS = [A0 / 2].concat(GAPS);              // 계단실 구간에도 1등
+  var FLPOS = [A0 / 2].concat(GAPS);              // 계단실 구간에도 1조
   var flHtml = FLPOS.map(function (a) {
-    return '<i class="cw-fl" style="left:' + a + 'px"></i>';
+    return '<i class="cw-fl" style="left:' + a + 'px;top:calc(50% - ' + FLX + 'px)"></i>' +
+           '<i class="cw-fl" style="left:' + a + 'px;top:calc(50% + ' + FLX + 'px)"></i>';
   }).join('');
   var ldBody = LD.map(function (m) {
     return '<i class="cw-ld" style="left:' + (A0 + m * PPM) + 'px"></i>';
@@ -201,10 +204,8 @@
      복도를 정면으로 보는 시점이라 복도 축과 나란한 면은 날이 서서 안 보인다.
      폭 방향 면(카메라 정면)에 사다리꼴로 세워 빛줄기처럼 읽히게 한다. */
   coneZ.forEach(function (cz) {
-    /* 꼭짓점의 작은 원이 렌즈 자리다. 콘의 clip-path 가 상단을 폭 45~55% 로 잘라
-       두었으므로(806px 중 80px) 그 안에 들어오는 크기여야 잘리지 않는다. */
-    add('cw-cone', 3.10 * PPM, WHH, 'translate3d(0,' + YC + 'px,' + cz + 'px)',
-      '<i class="cw-lens"></i>', { z: cz, cone: 1 });
+    add('cw-cone', 3.10 * PPM, WHH, 'translate3d(0,' + YC + 'px,' + cz + 'px)', '',
+      { z: cz, cone: 1 });
   });
 
   /* ---- 카메라 ---- */

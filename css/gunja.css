@@ -468,11 +468,8 @@
 /* HUD */
 .cw-ui { position: absolute; left: 64px; top: 58px; z-index: 12; pointer-events: none; }
 .cw-hint { margin-top: 13px; font: var(--fw-regular) 15px/1.5 var(--font); color: var(--fg-dim); }
-/* 우상단 제원 태그 — 15px 에서 절반으로. 본문이 아니라 곁다리 정보라
-   눈에 먼저 들어오면 안 된다. 줄간은 좁아진 글자에 맞춰 조금 벌린다. */
-.cw-spec { position: absolute; right: 64px; top: 58px; z-index: 12; text-align: right;
-  font: var(--fw-regular) 7.5px/1.9 var(--font); color: var(--fg-dim); }
-.cw-spec b { color: var(--fg); font-weight: var(--fw-semibold); }
+/* 05p 우상단 제원 태그(.cw-spec)는 마크업에서 걷어냈다 — 치수는 앞 두 장이 이미 말한다.
+   06p 교실(.rm-spec)은 남아 있다. */
 .cw-pos { position: absolute; right: 64px; bottom: 58px; z-index: 12; text-align: right;
   font: var(--fw-regular) 14px/1.3 var(--font); color: var(--fg-dim); }
 .cw-pos b { display: block; font: var(--fw-bold) 44px/1 var(--font-num); color: var(--fg);
@@ -722,11 +719,6 @@
     rgba(var(--cone, 236,238,244), calc(.024 * var(--cone-a, 1))) 45%,
     rgba(var(--cone, 236,238,244), calc(.005 * var(--cone-a, 1)))); }
 .fx-cone .cw-cone { opacity: 1; }
-/* 콘 꼭짓점 = 렌즈 자리. clip-path 상단(폭 45~55%, 약 80px) 안에 들어오는 크기여야 한다. */
-.cw-lens { position: absolute; left: 50%; top: 0; width: 22px; height: 22px; margin-left: -11px;
-  border-radius: 50%; background: rgba(var(--cone, 236,238,244), .55);
-  box-shadow: 0 0 0 2px rgba(var(--cone, 236,238,244), .30),
-    0 0 16px 3px rgba(var(--cone, 236,238,244), .40); }
 
 /* 하단 컨트롤 — 2행 (콘텐츠 / 모드) */
 .cw-ctrl { position: absolute; left: 64px; bottom: 52px; z-index: 12;
