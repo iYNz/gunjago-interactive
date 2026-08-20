@@ -160,11 +160,10 @@
      그런데 빛기둥은 수직 사다리꼴로 세워 두었으니, 개구를 뒤로 물리면 화면에서는
      "엉뚱한 데서 나온 빛"으로만 읽힌다. 여기서는 개구를 콘 바로 위에 맞춘다 —
      실제 기하는 5p 배치 도해(tools/make_system_plan.py)가 오프셋까지 그대로 그린다. */
-  var pjHtml = '', coneZ = [], pjA = [];
+  var coneZ = [], pjA = [];
   for (var p = 0; p < N; p++) {
     var mid = A0 + (p * PITCH + SEGL / 2) * PPM;
     pjA.push(mid);
-    pjHtml += '<i class="cw-pj" style="left:' + mid + 'px"></i>';
     coneZ.push(zOf(mid));
   }
 
@@ -192,16 +191,20 @@
   var ldBody = LD.map(function (m) {
     return '<i class="cw-ld" style="left:' + (A0 + m * PPM) + 'px"></i>';
   }).join('');
+  /* 천장에 프로젝터 본체를 그리던 것은 걷어냈다 — 빛기둥이 이미 위치를 말하고 있고,
+     본체 그림까지 얹으니 천장이 장비 도판처럼 읽혔다. 표시는 콘 꼭대기의 작은 원. */
   add('cw-ceil', CW, TL, 'translate3d(0,' + CEIL_Y + 'px,' + zc + 'px) rotateX(-90deg)',
     '<div class="cw-ceil__in" style="width:' + TL + 'px;height:' + CW + 'px">' +
-    flHtml + pjHtml + ldBody + '</div>');
+    flHtml + ldBody + '</div>');
 
   /* ---- 투사 콘 ----
      복도를 정면으로 보는 시점이라 복도 축과 나란한 면은 날이 서서 안 보인다.
      폭 방향 면(카메라 정면)에 사다리꼴로 세워 빛줄기처럼 읽히게 한다. */
   coneZ.forEach(function (cz) {
-    add('cw-cone', 3.10 * PPM, WHH, 'translate3d(0,' + YC + 'px,' + cz + 'px)', '',
-      { z: cz, cone: 1 });
+    /* 꼭짓점의 작은 원이 렌즈 자리다. 콘의 clip-path 가 상단을 폭 45~55% 로 잘라
+       두었으므로(806px 중 80px) 그 안에 들어오는 크기여야 잘리지 않는다. */
+    add('cw-cone', 3.10 * PPM, WHH, 'translate3d(0,' + YC + 'px,' + cz + 'px)',
+      '<i class="cw-lens"></i>', { z: cz, cone: 1 });
   });
 
   /* ---- 카메라 ---- */

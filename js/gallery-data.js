@@ -53,9 +53,10 @@ window.GALLERY = {
     items: [
       { k: 'i', s: 'assets/img/booth/vled-01_1.jpg', t: '세로형 벽면 LED',
         m: '상시 표출 · 통로 끝에서 학과를 알아보게', spec: '600 × 2,400mm · 240 × 960px' },
-      { k: 'i', s: 'assets/img/booth/tv-01-elec.jpg', t: '65″ 벽걸이 TV',
+      /* [1]·[2] 는 시안 A/B 를 바꿀 때 room3d.js setShot() 이 갈아 끼운다 */
+      { k: 'i', s: 'assets/img/booth/tv-elec-a.jpg', t: '65″ 벽걸이 TV',
         m: '카운터 태블릿이 그대로 미러링하는 화면', spec: '1,920 × 1,080 · 16:9' },
-      { k: 'i', s: 'assets/img/booth/tablet-01-elec-w.jpg', t: '카운터 태블릿',
+      { k: 'i', s: 'assets/img/booth/tab-elec-a.jpg', t: '카운터 태블릿',
         m: '갤럭시탭 12.4″ — 손으로 넘기면 TV 가 따라온다', spec: '16:10' },
       { k: 'i', s: 'assets/img/led/imw-hero.jpg', t: '인터랙티브 미디어월',
         m: '화면은 예시 — 실적용 시 학교 로고로 교체', spec: '4,000 × 2,500 · 16:10 · 10㎡' }

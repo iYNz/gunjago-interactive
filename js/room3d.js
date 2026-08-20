@@ -131,11 +131,13 @@
 
      태블릿은 TV 를 미러링하지만 갤럭시탭이 16:10 이라 16:9 를 그대로 쓰면 잘린다.
      같은 화면을 16:10 으로 다시 잡은 파일을 따로 쓴다. */
-  var SHOT = {
-    v: 'assets/img/booth/vled-01_1.jpg',            // 세로 LED  1:4
-    t: 'assets/img/booth/tv-01-elec.jpg',           // 65″ TV    16:9
-    p: 'assets/img/booth/tablet-01-elec-w.jpg'      // 태블릿    16:10
+  var VLED = 'assets/img/booth/vled-01_1.jpg';      // 세로 LED 1:4 — 두 시안이 공용
+  var SHOTS = {                                     // TV 16:9 · 태블릿 16:10
+    A: { t: 'assets/img/booth/tv-elec-a.jpg', p: 'assets/img/booth/tab-elec-a.jpg' },
+    B: { t: 'assets/img/booth/tv-elec-b.jpg', p: 'assets/img/booth/tab-elec-b.jpg' }
   };
+  var shot = 'A';
+  var SHOT = { v: VLED, t: SHOTS.A.t, p: SHOTS.A.p };
 
   function screen(src) {
     return src ? '<img class="bx__img" src="' + src + '" alt="" />' : '';
@@ -207,9 +209,14 @@
              c: c1 ? [c1, c2 || ''] : null };
   }
   var BOOTH_CAP = '세로형 LED 600 × 2,400 · 65″ TV · 카운터 하우징 태블릿 (TV 미러링)';
-  /* 다섯 부스에 같은 디지털전기과 시안이 들어가 있다 — 보는 사람이 "다 같은 과인가"
-     하지 않도록 자막에서 먼저 밝힌다. */
-  var BOOTH_NOTE = '화면은 디지털전기과 시안 — 실제로는 해당 과에 맞춰 교체됩니다';
+  /* 다섯 부스에 같은 시안이 들어가 있다 — 보는 사람이 "다 같은 과인가" 하지 않도록
+     자막에서 먼저 밝힌다. A/B 로 시안을 바꾸면 학과도 같이 바뀌므로 문구도 따라간다.
+     자리표시자를 넣어 두고 apply() 가 현재 시안으로 풀어 쓴다. */
+  var BOOTH_NOTE = '@shot';
+  var SHOT_NOTE = {
+    A: '화면은 시안 A · 디지털전자과 — 실제로는 해당 과에 맞춰 교체됩니다',
+    B: '화면은 시안 B · 디지털전기과 — 실제로는 해당 과에 맞춰 교체됩니다'
+  };
   var DOOR = { x: HW, z: -HL + 0.5 * BW };          // 미술실 입구(북측 벽 서쪽 끝)
   var EXIT = { x: HW, z: -HL + 10.5 * BW };         // 출구(북측 벽 동쪽)
   var SPOTS = [
@@ -266,8 +273,11 @@
     if (dEl) dEl.textContent = v.d;
     if (nEl) nEl.textContent = ('0' + (vi + 1)).slice(-2);
     if (cEl) {
-      if (v.c) { cEl.innerHTML = v.c[0] + '<br />' + v.c[1]; cEl.style.opacity = ''; }
-      else { cEl.style.opacity = '0'; }
+      if (v.c) {
+        var l2 = v.c[1] === '@shot' ? SHOT_NOTE[shot] : v.c[1];
+        cEl.innerHTML = v.c[0] + '<br />' + l2;
+        cEl.style.opacity = '';
+      } else { cEl.style.opacity = '0'; }
     }
     slide.querySelectorAll('.rm-vbtn').forEach(function (b, j) { b.classList.toggle('is-on', j === vi); });
   }
@@ -276,6 +286,29 @@
   slide.querySelectorAll('.rm-vbtn').forEach(function (b, i) {
     b.addEventListener('click', function (e) { e.stopPropagation(); vi = i; apply(); });
   });
+
+  /* ---- 부스 화면 시안 A / B ----
+     다섯 부스가 같은 시안을 쓰므로 어느 줄에서 눌러도 전부 같이 바뀐다.
+     라이트박스가 읽는 GALLERY 항목도 같이 갈아 끼워야 확대했을 때 어긋나지 않는다. */
+  function setShot(v) {
+    if (!SHOTS[v]) return;
+    shot = v;
+    slide.querySelectorAll('.bx--tv > .bx__f > .bx__img').forEach(function (im) { im.src = SHOTS[v].t; });
+    slide.querySelectorAll('.bx--tab > .bx__f > .bx__img').forEach(function (im) { im.src = SHOTS[v].p; });
+    slide.querySelectorAll('.rm-abtn').forEach(function (b) {
+      b.classList.toggle('is-on', b.dataset.shot === v);
+    });
+    var g = window.GALLERY && window.GALLERY.booth;
+    if (g) {
+      g.items[1].s = SHOTS[v].t; g.items[2].s = SHOTS[v].p;
+      g.items[1].spec = g.items[2].spec = '시안 ' + v;
+    }
+    apply();                                   // 자막의 시안 표기를 갱신
+  }
+  slide.querySelectorAll('.rm-abtn').forEach(function (b) {
+    b.addEventListener('click', function (e) { e.stopPropagation(); setShot(b.dataset.shot); });
+  });
+  setShot(shot);
 
   /* 휠 아래로 = 다음 지점. 문서를 아래로 내리듯 동선을 따라간다
      (07p 복도는 휠 위로 = 전진 — 그쪽은 카메라가 앞으로 나가는 동작이라 방향이 반대다). */

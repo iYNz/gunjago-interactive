@@ -18,12 +18,12 @@
   <meta name="description" content="복도 바닥 프로젝션 · 대형 LED 미디어월 · 과 부스 5개소 — 콘텐츠 · 시스템 구축 계획." />
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
-  <link rel="stylesheet" href="css/tokens.css?v=20260821072000" />
-  <link rel="stylesheet" href="css/base.css?v=20260821072000" />
-  <link rel="stylesheet" href="css/slides.css?v=20260821072000" />
-  <link rel="stylesheet" href="css/storyboard.css?v=20260821072000" />
-  <link rel="stylesheet" href="css/proposal.css?v=20260821072000" />
-  <link rel="stylesheet" href="css/gunja.css?v=20260821072000" />
+  <link rel="stylesheet" href="css/tokens.css?v=20260821081000" />
+  <link rel="stylesheet" href="css/base.css?v=20260821081000" />
+  <link rel="stylesheet" href="css/slides.css?v=20260821081000" />
+  <link rel="stylesheet" href="css/storyboard.css?v=20260821081000" />
+  <link rel="stylesheet" href="css/proposal.css?v=20260821081000" />
+  <link rel="stylesheet" href="css/gunja.css?v=20260821081000" />
 </head>
 <body>
   <div id="boot"></div>
@@ -223,16 +223,23 @@
 
       <!-- 9지점을 한 줄씩 세로로 쌓는다. 2행으로 접으면 순서가 오른쪽 끝에서
            왼쪽 처음으로 되돌아와, 동선을 따라가는 목록으로 읽히지 않는다. -->
+      <!-- 부스 줄에는 시안 A/B 를 붙인다. 다섯 부스가 같은 시안을 쓰므로
+           어느 줄에서 바꾸든 전부 같이 바뀐다. -->
       <div class="rm-vbtns" data-no-advance>
-        <button class="rm-vbtn is-on" type="button"><b>01</b>미술실 입구</button>
-        <button class="rm-vbtn" type="button"><b>02</b>부스 01</button>
-        <button class="rm-vbtn" type="button"><b>03</b>부스 02</button>
-        <button class="rm-vbtn" type="button"><b>04</b>부스 03</button>
-        <button class="rm-vbtn" type="button"><b>05</b>미디어월</button>
-        <button class="rm-vbtn" type="button"><b>06</b>출구</button>
-        <button class="rm-vbtn" type="button"><b>07</b>부스 04</button>
-        <button class="rm-vbtn" type="button"><b>08</b>부스 05</button>
-        <button class="rm-vbtn" type="button"><b>09</b>입구 방향</button>
+        <div class="rm-vrow"><button class="rm-vbtn is-on" type="button"><b>01</b>미술실 입구</button></div>
+        <div class="rm-vrow"><button class="rm-vbtn" type="button"><b>02</b>부스 01</button>
+          <span class="rm-ab"><button class="rm-abtn is-on" type="button" data-shot="A">A</button><button class="rm-abtn" type="button" data-shot="B">B</button></span></div>
+        <div class="rm-vrow"><button class="rm-vbtn" type="button"><b>03</b>부스 02</button>
+          <span class="rm-ab"><button class="rm-abtn is-on" type="button" data-shot="A">A</button><button class="rm-abtn" type="button" data-shot="B">B</button></span></div>
+        <div class="rm-vrow"><button class="rm-vbtn" type="button"><b>04</b>부스 03</button>
+          <span class="rm-ab"><button class="rm-abtn is-on" type="button" data-shot="A">A</button><button class="rm-abtn" type="button" data-shot="B">B</button></span></div>
+        <div class="rm-vrow"><button class="rm-vbtn" type="button"><b>05</b>미디어월</button></div>
+        <div class="rm-vrow"><button class="rm-vbtn" type="button"><b>06</b>출구</button></div>
+        <div class="rm-vrow"><button class="rm-vbtn" type="button"><b>07</b>부스 04</button>
+          <span class="rm-ab"><button class="rm-abtn is-on" type="button" data-shot="A">A</button><button class="rm-abtn" type="button" data-shot="B">B</button></span></div>
+        <div class="rm-vrow"><button class="rm-vbtn" type="button"><b>08</b>부스 05</button>
+          <span class="rm-ab"><button class="rm-abtn is-on" type="button" data-shot="A">A</button><button class="rm-abtn" type="button" data-shot="B">B</button></span></div>
+        <div class="rm-vrow"><button class="rm-vbtn" type="button"><b>09</b>입구 방향</button></div>
       </div>
 
       <div class="rm-wheel" aria-hidden="true"><i></i></div>
@@ -310,10 +317,10 @@
 
   <!-- tech.js · cue-console.js · album-tabs.js · storyboard.js 는 담당하던 슬라이드가
        빠지면서 붙일 곳이 없어졌다. 파일은 deck/js 에 남겨 두고 로드만 끊는다. -->
-  <script src="js/gallery-data.js?v=20260821072000"></script>
-  <script src="js/room3d.js?v=20260821072000"></script>
-  <script src="js/corridor.js?v=20260821072000"></script>
-  <script src="js/imw-hover.js?v=20260821072000"></script>
-  <script src="js/deck.js?v=20260821072000"></script>
+  <script src="js/gallery-data.js?v=20260821081000"></script>
+  <script src="js/room3d.js?v=20260821081000"></script>
+  <script src="js/corridor.js?v=20260821081000"></script>
+  <script src="js/imw-hover.js?v=20260821081000"></script>
+  <script src="js/deck.js?v=20260821081000"></script>
 </body>
 </html>

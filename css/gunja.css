@@ -455,11 +455,8 @@
 /* 천장 · 프로젝터 매립 개구 10 · LiDAR 3 */
 .cw-ceil { position: absolute; background: #131316;
   box-shadow: inset 0 0 0 1px rgba(255,255,255,.05); }
-.cw-pj { position: absolute; top: 50%; width: 104px; height: 130px; margin: -65px 0 0 -52px;
-  border-radius: 3px; background: rgba(6,6,8,.9);
-  box-shadow: inset 0 0 0 2px rgba(255,255,255,.30), 0 0 20px rgba(255,255,255,.10); }
-.cw-pj::after { content: ""; position: absolute; inset: 34px 26px;
-  border-radius: 50%; background: rgba(232,236,244,.34); box-shadow: 0 0 22px rgba(255,255,255,.30); }
+/* 천장 프로젝터 본체(.cw-pj)는 걷어냈다 — 빛기둥이 이미 위치를 말한다.
+   대신 콘 꼭짓점에 렌즈 자리를 작은 원으로 찍는다(.cw-lens). */
 .cw-ld { position: absolute; top: 50%; width: 26px; height: 26px; margin: -13px 0 0 -13px;
   border-radius: 50%; background: rgba(6,6,8,.92);
   box-shadow: inset 0 0 0 2px rgba(255,255,255,.5), 0 0 14px rgba(255,255,255,.18); }
@@ -725,6 +722,11 @@
     rgba(var(--cone, 236,238,244), calc(.024 * var(--cone-a, 1))) 45%,
     rgba(var(--cone, 236,238,244), calc(.005 * var(--cone-a, 1)))); }
 .fx-cone .cw-cone { opacity: 1; }
+/* 콘 꼭짓점 = 렌즈 자리. clip-path 상단(폭 45~55%, 약 80px) 안에 들어오는 크기여야 한다. */
+.cw-lens { position: absolute; left: 50%; top: 0; width: 22px; height: 22px; margin-left: -11px;
+  border-radius: 50%; background: rgba(var(--cone, 236,238,244), .55);
+  box-shadow: 0 0 0 2px rgba(var(--cone, 236,238,244), .30),
+    0 0 16px 3px rgba(var(--cone, 236,238,244), .40); }
 
 /* 하단 컨트롤 — 2행 (콘텐츠 / 모드) */
 .cw-ctrl { position: absolute; left: 64px; bottom: 52px; z-index: 12;
@@ -916,3 +918,14 @@
 .bx--tv[data-gallery]:hover   > .bx__f { box-shadow: inset 0 0 0 6px #dfe3ec, 0 0 46px rgba(255,255,255,.36); }
 .bx--tab[data-gallery]:hover  > .bx__f { box-shadow: inset 0 0 0 4px #dfe3ec, 0 0 34px rgba(255,255,255,.40); }
 .bx--led[data-gallery]:hover  > .bx__f { box-shadow: inset 0 0 0 7px #dfe3ec, 0 0 110px rgba(255,255,255,.44); }
+/* 관람 지점 줄 — 부스 줄에는 시안 A/B 가 붙는다 */
+.rm-vrow { display: flex; align-items: center; gap: 7px; }
+.rm-ab { display: inline-flex; gap: 2px; padding: 2px; border-radius: 999px;
+  background: rgba(20,20,22,.55);
+  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+.rm-abtn { width: 24px; padding: 5px 0; border: 0; cursor: pointer; border-radius: 999px;
+  background: none; color: var(--fg-dim);
+  font: var(--fw-semibold) 12px/1 var(--font-num); letter-spacing: .04em;
+  transition: all .18s ease; }
+.rm-abtn:hover { color: var(--fg); }
+.rm-abtn.is-on { color: #0b0b0d; background: var(--fg); }
