@@ -17,8 +17,28 @@ window.GALLERY = {
       { k: 'v', s: 'assets/video/imw7.webm', t: '디지털 앨범 · 그리드', m: '여러 정보를 한눈에 펼치는 그리드', spec: 'IMW 보유 콘텐츠' },
       { k: 'v', s: 'assets/video/imw8.webm', t: '에코 스페이스', m: '공간 반응형 앰비언트', spec: 'IMW 보유 콘텐츠' }
     ]
+  },
+
+  /* 02p · 도면 2매 — 축소 표시라 치수가 안 읽힌다. 클릭하면 원본 크기로 연다. */
+  plan: {
+    fit: 'contain',
+    items: [
+      { k: 'i', s: 'assets/img/plan-original.png', t: '제공받은 원본 도면',
+        m: '3층 평면 · 통심 ③~⑤ 구간이 구축 범위', spec: '학교 제공' },
+      { k: 'i', s: 'assets/img/scope-plan.png', t: '구축 범위 도면',
+        m: '칸막이 제거 후 단일 공간 · 바닥 프로젝션 + LED 미디어월 구역', spec: '실측 기반' }
+    ]
+  },
+
+  /* 03p · 장비 배치 도해 (tools/make_system_plan.py) */
+  sysplan: {
+    fit: 'contain',
+    items: [
+      { k: 'i', s: 'assets/img/system-plan.png', t: '장비 배치 도해',
+        m: '프로젝터 10대 · 엣지 블렌딩 18% · LiDAR 3대 · LED 미디어월 · 과 부스 5개소',
+        spec: '통심 ③~⑤' }
+    ]
   }
 
-  /* storyboard · led · scope · booth* 갤러리는 해당 슬라이드가 빠지면서 같이 걷어냈다.
-     남은 라이트박스는 09p IMW 8종 하나뿐이다. */
+  /* storyboard · led · scope · booth* 갤러리는 해당 슬라이드가 빠지면서 같이 걷어냈다. */
 };

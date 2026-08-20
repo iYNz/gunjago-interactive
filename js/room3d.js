@@ -193,30 +193,36 @@
      aim 이 있으면 그 지점을 정면에 두고, 없으면 a 를 그대로 쓴다. */
   function lookAt(cx, cz, tx, tz) { return Math.atan2(tx - cx, -(tz - cz)) * 180 / Math.PI; }
   /* c = 하단 자막. 화면 면에 얹던 스펙을 여기로 옮겼다 — 목업 위에 글씨가 없어야
-     실제로 어떻게 보일지가 판단된다. */
-  function at(k, d, x, z, tx, tz, e, c) {
-    return { k: k, d: d, x: x, z: z, a: lookAt(x, z, tx, tz), e: e || 1.65, c: c || '' };
+     실제로 어떻게 보일지가 판단된다.
+     지점마다 길이가 달라 한 줄↔두 줄로 바뀌면 자막 상자가 들썩인다. 1행 스펙 /
+     2행 단서로 나눠 전 지점을 2줄로 고정한다(자막이 없는 지점은 상자째 숨긴다). */
+  function at(k, d, x, z, tx, tz, e, c1, c2) {
+    return { k: k, d: d, x: x, z: z, a: lookAt(x, z, tx, tz), e: e || 1.65,
+             c: c1 ? [c1, c2 || ''] : null };
   }
-  var BOOTH_CAP = '세로형 LED 600 × 2,400 (240 × 960px) · 65″ TV · 카운터 하우징 태블릿 (TV 미러링)';
+  var BOOTH_CAP = '세로형 LED 600 × 2,400 · 65″ TV · 카운터 하우징 태블릿 (TV 미러링)';
   /* 다섯 부스에 같은 디지털전기과 시안이 들어가 있다 — 보는 사람이 "다 같은 과인가"
      하지 않도록 자막에서 먼저 밝힌다. */
-  var BOOTH_NOTE = ' — 화면은 디지털전기과 시안, 실제로는 해당 과에 맞춰 교체됩니다';
+  var BOOTH_NOTE = '화면은 디지털전기과 시안 — 실제로는 해당 과에 맞춰 교체됩니다';
   var DOOR = { x: HW, z: -HL + 0.5 * BW };          // 미술실 입구(북측 벽 서쪽 끝)
   var EXIT = { x: HW, z: -HL + 10.5 * BW };         // 출구(북측 벽 동쪽)
   var SPOTS = [
     at('미술실 입구', '문 열었을 때', 820, -1790, 60, -1200, 1.70,
-      '통합 교실 16,200 × 8,400mm — 특별교실 3실 통합'),
-    at('과 부스 01', '입구 정면 · 서측 벽', 0, -700, 0, -HL, 1.62, BOOTH_CAP + BOOTH_NOTE),
-    at('과 부스 02', '외벽쪽 · 서측', 400, -700, -HW, -700, 1.62, BOOTH_CAP + BOOTH_NOTE),
-    at('과 부스 03', '외벽쪽 · 동측', 400, 900, -HW, 900, 1.62, BOOTH_CAP + BOOTH_NOTE),
+      '통합 교실 16,200 × 8,400mm · 약 136㎡',
+      '기존 특별교실 3실(미술실 · 준비실 · VR체험실) 칸막이를 제거해 하나로 씁니다'),
+    at('과 부스 01', '입구 정면 · 서측 벽', 0, -700, 0, -HL, 1.62, BOOTH_CAP, BOOTH_NOTE),
+    at('과 부스 02', '외벽쪽 · 서측', 400, -700, -HW, -700, 1.62, BOOTH_CAP, BOOTH_NOTE),
+    at('과 부스 03', '외벽쪽 · 동측', 400, 900, -HW, 900, 1.62, BOOTH_CAP, BOOTH_NOTE),
     at('인터랙티브 미디어월', '동측 단변 전면', 0, -400, 0, HL, 1.65,
-      'P2.5 · 4,000 × 2,500mm · 16:10 · 1,600 × 1,000px · 40장 · 10㎡ — 화면은 예시, 실적용 시 군자디지털과학고등학교 로고로 교체됩니다'),
+      'P2.5 · 4,000 × 2,500mm · 16:10 · 1,600 × 1,000px · 500각 40장 · 10㎡',
+      '화면은 예시 — 실적용 시 군자디지털과학고등학교 로고로 교체됩니다'),
     at('출구', '북측 벽 · 동쪽 출입구', -300, EXIT.z, EXIT.x, EXIT.z, 1.65,
-      '도면상 존치 출입구 2개소 — 서측 입구 · 동측 출구'),
-    at('과 부스 04', '복도쪽 · 동측', -400, 900, HW, 900, 1.62, BOOTH_CAP + BOOTH_NOTE),
-    at('과 부스 05', '복도쪽 · 서측', -400, -700, HW, -700, 1.62, BOOTH_CAP + BOOTH_NOTE),
-    at('입구 방향', '교실 안에서 미술실 입구', -250, -500, DOOR.x, DOOR.z, 1.68,
-      '좌석 · 테이블 배치는 학교 운영에 맡깁니다')
+      '도면상 존치 출입구 2개소 — 서측 입구 · 동측 출구',
+      '중앙부 출입문 2개소는 벽체로 마감합니다'),
+    at('과 부스 04', '복도쪽 · 동측', -400, 900, HW, 900, 1.62, BOOTH_CAP, BOOTH_NOTE),
+    at('과 부스 05', '복도쪽 · 서측', -400, -700, HW, -700, 1.62, BOOTH_CAP, BOOTH_NOTE),
+    /* 마지막 뷰는 돌아본 컷이라 덧붙일 스펙이 없다 — 자막 없이 둔다 */
+    at('입구 방향', '교실 안에서 미술실 입구', -250, -500, DOOR.x, DOOR.z, 1.68)
   ];
   var vi = 0;
   var kEl = document.getElementById('roomViewK');
@@ -253,7 +259,10 @@
     if (kEl) kEl.textContent = v.k;
     if (dEl) dEl.textContent = v.d;
     if (nEl) nEl.textContent = ('0' + (vi + 1)).slice(-2);
-    if (cEl) { cEl.textContent = v.c; cEl.style.opacity = v.c ? '' : '0'; }
+    if (cEl) {
+      if (v.c) { cEl.innerHTML = v.c[0] + '<br />' + v.c[1]; cEl.style.opacity = ''; }
+      else { cEl.style.opacity = '0'; }
+    }
     slide.querySelectorAll('.rm-vbtn').forEach(function (b, j) { b.classList.toggle('is-on', j === vi); });
   }
   apply();
