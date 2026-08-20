@@ -155,14 +155,17 @@
   /* 발자국·18% 중첩 띠·LiDAR 부채꼴 오버레이는 걷어냈다 — 토글 세 개가 화면을
      설명 도표로 만들었고, 이 슬라이드가 보여줄 것은 "실제로 이렇게 보인다"다.
      수치 근거는 6p 와 tools/projector_sim.py 에 남아 있다. */
-  var N = 10, PITCH = 1.592, SEGL = 1.937, OFF = 0.689;
-  var pjHtml = '', coneZ = [];
+  var N = 10, PITCH = 1.592, SEGL = 1.937;
+  /* 실제로는 경사 투사라 천장 개구가 발자국보다 1.66m 뒤에 온다(오프셋 689 + 커버 절반).
+     그런데 빛기둥은 수직 사다리꼴로 세워 두었으니, 개구를 뒤로 물리면 화면에서는
+     "엉뚱한 데서 나온 빛"으로만 읽힌다. 여기서는 개구를 콘 바로 위에 맞춘다 —
+     실제 기하는 5p 배치 도해(tools/make_system_plan.py)가 오프셋까지 그대로 그린다. */
+  var pjHtml = '', coneZ = [], pjA = [];
   for (var p = 0; p < N; p++) {
-    var s0 = A0 + p * PITCH * PPM, s1 = s0 + SEGL * PPM;
-    /* 천장 개구는 발자국보다 투사 오프셋만큼 뒤에 온다. 양끝만 구간 안으로 물린다. */
-    var nad = Math.min(Math.max(s0 - OFF * PPM, A0 + 0.35 * PPM), A0 + L - 0.35 * PPM);
-    pjHtml += '<i class="cw-pj" style="left:' + nad + 'px"></i>';
-    coneZ.push(zOf((s0 + s1) / 2));
+    var mid = A0 + (p * PITCH + SEGL / 2) * PPM;
+    pjA.push(mid);
+    pjHtml += '<i class="cw-pj" style="left:' + mid + 'px"></i>';
+    coneZ.push(zOf(mid));
   }
 
   /* LiDAR 3대 — 교실쪽 벽 상부. 구축 구간 3분할(2.7 / 8.1 / 13.5m).
@@ -176,9 +179,12 @@
     '<span>구축 범위 끝 · 통심 ⑤<br /><i>16,200mm</i></span>', { z: zOf(TL) });
 
   /* ---- 천장 : 형광등 · 프로젝터 매립 개구 · LiDAR ----
-     형광등은 프로젝터 개구 사이 빈칸에만 넣는다. 매립 개구와 겹치면 둘 다 못 단다.
-     개구 반폭 52 · 등 반폭 75 이므로, 개구 간 310px 틈의 중앙이면 양쪽 80px 여유. */
-  var GAPS = [442, 1270, 2097, 2925, 3905].map(function (v) { return A0 + v; });
+     형광등은 프로젝터 개구 사이 빈칸의 정중앙에 둔다 — 좌표를 손으로 적어 두면
+     개구가 움직일 때마다 어긋나므로 pjA 에서 계산한다.
+     개구 반폭 52 · 등 반폭 75 · 개구 간격 414px → 틈 310px, 등 150 이 들어가고 80px 씩 남는다.
+     한 칸 걸러 하나씩만 놓아 등 간격을 828px(3.2m)로 — 매 칸이면 1.6m 라 너무 촘촘하다. */
+  var GAPS = [];
+  for (var g = 0; g + 2 < pjA.length; g += 2) GAPS.push((pjA[g] + pjA[g + 1]) / 2);
   var FLPOS = [A0 / 2].concat(GAPS);              // 계단실 구간에도 1등
   var flHtml = FLPOS.map(function (a) {
     return '<i class="cw-fl" style="left:' + a + 'px"></i>';
@@ -267,8 +273,14 @@
     slide.style.setProperty('--cone', CONE[f] || CONE['']);
     slide.style.setProperty('--cone-a', f ? '1' : '.45');
   }
+  var last = null;                       // 형광등으로 갈 때 접어 둔 콘텐츠
   slide.querySelectorAll('.cw-fbtn').forEach(function (b) {
-    b.addEventListener('click', function (e) { e.stopPropagation(); setFloor(b); });
+    b.addEventListener('click', function (e) {
+      e.stopPropagation();
+      setFloor(b);
+      /* 콘텐츠를 직접 고르면 형광등 복귀분은 무효 — 지금 고른 것이 기준이 된다 */
+      last = b.dataset.floor ? b : null;
+    });
   });
   setFloor(slide.querySelector('.cw-fbtn.is-on'));
 
@@ -278,11 +290,19 @@
   slide.querySelectorAll('.cw-mbtn').forEach(function (b) {
     b.addEventListener('click', function (e) {
       e.stopPropagation();
-      var m = b.dataset.mode;
+      var m = b.dataset.mode, lit = m === 'lit';
       slide.querySelectorAll('.cw-mbtn').forEach(function (x) { x.classList.remove('is-on'); });
       b.classList.add('is-on');
-      slide.classList.toggle('is-lit', m === 'lit');
-      slide.classList.toggle('fx-cone', m !== 'lit');
+      slide.classList.toggle('is-lit', lit);
+      slide.classList.toggle('fx-cone', !lit);
+      /* 형광등을 켜면 프로젝터는 꺼진 상태다 — 바닥 콘텐츠도 같이 내려야 앞뒤가 맞는다.
+         소등으로 돌아올 때 직전 콘텐츠를 되살린다. */
+      if (lit) {
+        last = slide.querySelector('.cw-fbtn.is-on');
+        setFloor(slide.querySelector('.cw-fbtn[data-floor=""]'));
+      } else if (last) {
+        setFloor(last);
+      }
     });
   });
 })();

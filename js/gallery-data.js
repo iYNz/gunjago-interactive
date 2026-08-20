@@ -23,10 +23,26 @@ window.GALLERY = {
   plan: {
     fit: 'contain',
     items: [
-      { k: 'i', s: 'assets/img/plan-original.png', t: '제공받은 원본 도면',
+      { k: 'i', s: 'assets/img/plan-original.png?v=3', t: '제공받은 원본 도면',
         m: '3층 평면 · 통심 ③~⑤ 구간이 구축 범위', spec: '학교 제공' },
       { k: 'i', s: 'assets/img/scope-plan.png', t: '구축 범위 도면',
         m: '칸막이 제거 후 단일 공간 · 바닥 프로젝션 + LED 미디어월 구역', spec: '실측 기반' }
+    ]
+  },
+
+  /* 06p · 3D 안의 화면들 — 작고 비스듬해 내용이 안 읽힌다. 클릭하면 원본으로 연다.
+     순서는 room3d.js zoom(0..3) 과 맞춰야 한다. */
+  booth: {
+    fit: 'contain',
+    items: [
+      { k: 'i', s: 'assets/img/booth/vled-01_1.jpg', t: '세로형 벽면 LED',
+        m: '상시 표출 · 통로 끝에서 학과를 알아보게', spec: '600 × 2,400mm · 240 × 960px' },
+      { k: 'i', s: 'assets/img/booth/tv-01-elec.jpg', t: '65″ 벽걸이 TV',
+        m: '카운터 태블릿이 그대로 미러링하는 화면', spec: '1,920 × 1,080 · 16:9' },
+      { k: 'i', s: 'assets/img/booth/tablet-01-elec-w.jpg', t: '카운터 태블릿',
+        m: '갤럭시탭 12.4″ — 손으로 넘기면 TV 가 따라온다', spec: '16:10' },
+      { k: 'i', s: 'assets/img/led/imw-hero.jpg', t: '인터랙티브 미디어월',
+        m: '화면은 예시 — 실적용 시 학교 로고로 교체', spec: '4,000 × 2,500 · 16:10 · 10㎡' }
     ]
   },
 

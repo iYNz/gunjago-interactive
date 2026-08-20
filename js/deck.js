@@ -103,17 +103,21 @@
     current = nx;
     /* 복도 시뮬레이션 / 기술구성으로 들어올 때: 앞에서 오면 첫 항목, 뒤에서 오면 마지막부터 */
     if (slides[current].id === 'corridor-sim3d' && window.CORR) window.CORR.reset(dir < 0);
+    if (slides[current].id === 'room-sim3d' && window.ROOM) window.ROOM.reset(dir < 0);
     if (slides[current].id === 'tech' && window.TECH) window.TECH.reset(dir < 0);
     var gt = slides[current].querySelector('.sc-track-main');
     if (gt) { gt.scrollLeft = (dir < 0) ? Math.max(0, gt.scrollWidth - gt.clientWidth) : 0; }
     render();
   }
   function gatedTrack() { return slides[current].querySelector('.sc-track-main'); }
-  /* 복도 시뮬레이션은 16.2m 를 다 걸은 뒤, 기술구성은 두 센서 뷰를 소진한 뒤 슬라이드를 넘긴다 */
+  /* 복도 시뮬레이션은 16.2m 를 다 걸은 뒤, 교실은 9지점을 다 본 뒤,
+     기술구성은 두 센서 뷰를 소진한 뒤 슬라이드를 넘긴다 */
   function onCorr() { return slides[current].id === 'corridor-sim3d' && window.CORR; }
+  function onRoom() { return slides[current].id === 'room-sim3d' && window.ROOM; }
   function onTech() { return slides[current].id === 'tech' && window.TECH; }
   function next() {
     if (onCorr() && window.CORR.next()) return;
+    if (onRoom() && window.ROOM.next()) return;
     if (onTech() && window.TECH.next()) return;
     var t = gatedTrack();
     if (t) {
@@ -124,6 +128,7 @@
   }
   function prev() {
     if (onCorr() && window.CORR.prev()) return;
+    if (onRoom() && window.ROOM.prev()) return;
     if (onTech() && window.TECH.prev()) return;
     var t = gatedTrack();
     if (t) {

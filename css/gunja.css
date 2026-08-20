@@ -905,3 +905,12 @@
   object-fit: contain; background: #fff;
   border-radius: var(--radius-sm); box-shadow: 0 0 0 1px var(--line); }.plan-pair img, .sys-plan { cursor: zoom-in; transition: box-shadow .2s var(--ease-soft); }
 .plan-pair img:hover, .sys-plan:hover { box-shadow: 0 0 0 1px var(--line-strong), 0 18px 44px rgba(0,0,0,.5); }
+/* 3D 안의 화면은 클릭하면 원본으로 열린다. 호버 때 프레임이 밝아져 "누를 수 있다"를 알린다.
+   .bx 자체는 두께 0 컨테이너라 히트영역이 없다 — 앞면(.bx__f)이 받아 준다. */
+.bx[data-gallery] { cursor: zoom-in; }
+.bx[data-gallery] > .bx__f { transition: box-shadow .2s var(--ease-soft), filter .2s var(--ease-soft); }
+.bx[data-gallery]:hover > .bx__f { filter: brightness(1.16); }
+.bx--vled[data-gallery]:hover > .bx__f { box-shadow: inset 0 0 0 5px #dfe3ec, 0 0 60px rgba(255,255,255,.42); }
+.bx--tv[data-gallery]:hover   > .bx__f { box-shadow: inset 0 0 0 6px #dfe3ec, 0 0 46px rgba(255,255,255,.36); }
+.bx--tab[data-gallery]:hover  > .bx__f { box-shadow: inset 0 0 0 4px #dfe3ec, 0 0 34px rgba(255,255,255,.40); }
+.bx--led[data-gallery]:hover  > .bx__f { box-shadow: inset 0 0 0 7px #dfe3ec, 0 0 110px rgba(255,255,255,.44); }

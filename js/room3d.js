@@ -56,9 +56,9 @@
       'translate3d(' + (cx - w / 2) + 'px,' + (cy - h / 2) + 'px,' + cz + 'px)' +
       (rot || '') + '">' + (html || '') + '</i>';
   }
-  function box(w, h, d, x, y, z, cls, html) {
+  function box(w, h, d, x, y, z, cls, html, attr) {
     var hw = w / 2, hh = h / 2, hd = d / 2;
-    return '<div class="bx ' + (cls || '') + '" style="transform:translate3d(' +
+    return '<div class="bx ' + (cls || '') + '"' + (attr || '') + ' style="transform:translate3d(' +
       x + 'px,' + y + 'px,' + z + 'px)">' +
       face(w, h, 0, 0, hd, '', 'bx__f', html) +
       face(d, h, -hw, 0, 0, ' rotateY(-90deg)', 'bx__s') +
@@ -86,7 +86,7 @@
        앞으로 밀어야 옆면이 보이고, 뒤에 그림자를 깔아야 떠 있는 게 읽힌다. */
     wallShadow(4 * PPM, 2.5 * PPM, 0, 0) +
     box(4 * PPM, 2.5 * PPM, 0.34 * PPM, 0, 0, 0.17 * PPM + 6, 'bx--led',
-      '<img class="bx__img" src="assets/img/led/imw-hero.jpg" alt="" />'),
+      '<img class="bx__img" src="assets/img/led/imw-hero.jpg" alt="" />', zoom(3)),
     0, HL).dataset.solid = '1';   // 입체 상자를 품은 면 — opacity 로 페이드하면 납작해진다
 
   /* ---- 서측 단변 : 입구 정면 벽 — 과 부스 01 이 붙는다 ---- */
@@ -141,6 +141,12 @@
     return src ? '<img class="bx__img" src="' + src + '" alt="" />' : '';
   }
 
+  /* 3D 안에서는 화면이 작고 비스듬해 내용이 안 읽힌다 — 클릭하면 원본으로 연다.
+     deck.js 라이트박스가 [data-gallery][data-index] 를 잡으므로 상자에 그대로 얹는다. */
+  function zoom(i) {
+    return ' data-no-advance data-gallery="booth" data-index="' + i + '"';
+  }
+
   /* 벽면에 지는 그림자. 기기보다 조금 크게 잡고 아래로 내려 광원이 위에 있다는
      전제를 맞춘다. 벽(z=0) 바로 앞 2px 에 눕혀 기기 뒤로 깔린다. */
   function wallShadow(w, h, x, y) {
@@ -166,15 +172,15 @@
     var vy = FL - 39 - vh / 2, ty = FL - 330 - th / 2;
     return '<div class="rm-booth__no">' + n + '</div>' +
       wallShadow(vw, vh, lx, vy) + wallShadow(tw, th, rx, ty) +
-      box(vw, vh, vd, lx, vy, vd / 2 + OFF, 'bx--vled', screen(SHOT.v)) +
-      box(tw, th, td, rx, ty, td / 2 + OFF, 'bx--tv', screen(SHOT.t)) +
+      box(vw, vh, vd, lx, vy, vd / 2 + OFF, 'bx--vled', screen(SHOT.v), zoom(0)) +
+      box(tw, th, td, rx, ty, td / 2 + OFF, 'bx--tv', screen(SHOT.t), zoom(1)) +
       box(cw, ch, cd, rx, FL - ch / 2, cz, 'bx--desk', '') +
       /* 경사 하우징에 눕는 태블릿. 판 한 장이면 옆에서 종잇장이 되므로 얇은 상자로
          세운다 — 갤럭시탭 12.4″ 는 16:10, 두께 6mm 에 하우징 테두리가 더 붙는다.
          상자를 눕히는 회전은 바깥 래퍼가 맡고, 안쪽 box() 는 로컬 원점에 둔다. */
       '<i class="rm-tab" style="transform:translate3d(' + rx + 'px,' +
       (FL - ch - 8) + 'px,' + (cz + 40) + 'px) rotateX(58deg)">' +
-      box(84, 52, 9, 0, 0, 0, 'bx--tab', screen(SHOT.p)) + '</i>';
+      box(84, 52, 9, 0, 0, 0, 'bx--tab', screen(SHOT.p), zoom(2)) + '</i>';
   }
 
   BOOTHS.forEach(function (b) {
@@ -271,12 +277,29 @@
     b.addEventListener('click', function (e) { e.stopPropagation(); vi = i; apply(); });
   });
 
+  /* 휠 아래로 = 다음 지점. 문서를 아래로 내리듯 동선을 따라간다
+     (07p 복도는 휠 위로 = 전진 — 그쪽은 카메라가 앞으로 나가는 동작이라 방향이 반대다). */
   var lock = 0;
   slide.addEventListener('wheel', function (e) {
     e.preventDefault();
     if (e.timeStamp - lock < 300) return;
     lock = e.timeStamp;
-    vi = Math.max(0, Math.min(SPOTS.length - 1, vi + (e.deltaY < 0 ? 1 : -1)));
-    apply();
+    step(e.deltaY > 0 ? 1 : -1);
   }, { passive: false });
+
+  function step(d) {
+    var nx = vi + d;
+    if (nx < 0 || nx > SPOTS.length - 1) return false;   // 끝 — 슬라이드로 넘긴다
+    vi = nx; apply();
+    return true;
+  }
+
+  /* deck.js 가 ← → · Space 를 넘기기 전에 물어본다. 9지점을 다 보기 전에는
+     슬라이드가 넘어가지 않고, 되돌아갈 때도 마찬가지로 처음까지 되짚는다.
+     들어오는 방향에 따라 시작 지점이 다르다 — 뒤에서 오면 마지막 컷부터. */
+  window.ROOM = {
+    next: function () { return step(1); },
+    prev: function () { return step(-1); },
+    reset: function (fromEnd) { vi = fromEnd ? SPOTS.length - 1 : 0; apply(); }
+  };
 })();
